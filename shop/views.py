@@ -13,7 +13,7 @@ def login(request):
     if(request.method == "POST"):
         try:
             received_json_data = json.loads(request.body.decode("utf-8"))
-            u = user.Objects.get(first_name=received_json_data.emailId)
+            u = user.objects.get(username=received_json_data.get('emailId'))
             if(u != None):
                 return JsonResponse({'data':'authorized'})
             return JsonResponse({'data':'unauthorized'})

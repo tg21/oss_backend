@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class user(models.Model):
+    username = models.CharField(max_length=12,)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     role = models.CharField(max_length=30,default='admin') # can be admin,buyer,seller
