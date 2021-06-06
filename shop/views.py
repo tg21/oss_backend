@@ -3,6 +3,7 @@ from django.http import HttpResponse,JsonResponse
 
 from .models import user
 import json
+from django.core.serializers import serialize
 # Create your views here.
 
 
@@ -13,10 +14,12 @@ def login(request):
     if(request.method == "POST"):
         try:
             received_json_data = json.loads(request.body.decode("utf-8"))
-            u = user.objects.get(username=received_json_data.get('emailId'))
+            u = user.objects.get(username=received_json_data.get('username'))
             if(u != None):
-                return JsonResponse({'data':'authorized'})
-            return JsonResponse({'data':'unauthorized'})
+                if(u.isBlocked == True):
+                    return JsonResponse({'auth':'blocked'})
+                return JsonResponse(u._getLoginView())
+            return JsonResponse({'auth':'unauthorized'})
         except Exception as e:
             return HttpResponse(str(type(e)))
     else:
