@@ -11,7 +11,7 @@ class user(models.Model):
     emailId = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
     isBlocked = models.BooleanField(default=False)
-    rating = models.DecimalField(max_digits=2,decimal_places=2,default=00.00)
+    rating = models.DecimalField(max_digits=4,decimal_places=2,default=00.00)
     role = models.CharField(max_length=30,default='admin') # can be admin,buyer,seller
     address = models.CharField(max_length=250)
     phone = models.CharField(max_length=15)
@@ -33,10 +33,10 @@ class item(models.Model):
     item_name = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
     price = models.DecimalField(max_digits=10,decimal_places=2)
-    discount = models.DecimalField(max_digits=2,decimal_places=2,default=00.00) # discount percentage
+    discount = models.DecimalField(max_digits=4,decimal_places=2,default=00.00) # discount percentage
     added_date = models.DateTimeField(default=timezone.now)
-    category = models.CharField(max_length=25)
-    rating = models.DecimalField(max_digits=2,decimal_places=2,default=00.00)
+    category = models.ForeignKey('category',on_delete=models.CASCADE)
+    rating = models.DecimalField(max_digits=4,decimal_places=2,default=00.00)
     img_url = models.CharField(max_length=100,null=True)
     tags = ArrayField(models.CharField(max_length=25))
     def __str__(self):
@@ -56,6 +56,11 @@ class cart(models.Model):
 
     def __str__(self):
         return str(self.id) + " :-> " + self.user_id + " " + self.item_id
+
+class category(models.Model):
+    category = models.CharField(max_length=20)
+    def __str__(self):
+        return str(self.id) + " :-> " + self.category
 
 class order(models.Model):
     user_id = models.ForeignKey('user',on_delete=models.CASCADE)
